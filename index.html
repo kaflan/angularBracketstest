@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link data-require="angular.js@1.5.3" data-semver="1.5.3" rel="stylesheet" href="Bootstrap" />
+  <link data-require="bootstrap-css@3.3.6" data-semver="3.3.6" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.css" />
+  <script data-require="angular.js@1.5.3" data-semver="1.5.3" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div ng-app="myApp" ng-controller="myCtrl" class="center">
+    <input ng-model="text" />
+    <p ng-if='balanced(text)'>валидно</p>
+    <p ng-if="!balanced(text)">  не валидно</p>
+  </div>
+  <script>
+    var app = angular.module('myApp', []);
+    app.controller('myCtrl', function($scope) {
+      $scope.text = '{{}}';
+      $scope.balanced = function (str) {
+      var arr = [];
+      for (var i = 0; i < str.length; i++) {
+        if (str[i] === '(' || str[i] === '{' || str[i] ==='[') {
+          arr.push(str[i]);
+        } else if (str[i] === ')' || str[i] === '}' || str[i] === ']') {
+          if (arr.length === 0 || !closeBrakets(arr.pop(), str[i])) {
+            return false;
+          }
+        }
+      }
+      return arr.length === 0;
+    };
+
+   var closeBrakets = function(open, close) {
+      if (open === '{' && close === '}') {
+        return true;
+      }
+      if (open === '[' && close === ']') {
+        return true;
+      }
+      if (open === '(' && close === ')') {
+        return true;
+      }
+      return false;
+    };
+      $scope.$watch('text', function(old, nev) {
+        console.log(balanced(nev));
+      }, true);
+    });
+
+    
+  </script>
+</body>
+
+</html>
